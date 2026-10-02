@@ -20,10 +20,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             Lab1Theme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    PlaceholderScreen(modifier = Modifier.padding(innerPadding))
                 }
             }
         }
@@ -31,17 +28,17 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
+fun PlaceholderScreen(modifier: Modifier = Modifier) {
     Text(
-        text = "Hello $name!",
+        text = "Lab 1 — List Search",
         modifier = modifier
     )
 }
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun PlaceholderScreenPreview() {
     Lab1Theme {
-        Greeting("Android")
+        PlaceholderScreen()
     }
 }
