@@ -1,4 +1,4 @@
-package ru.agapov.lab1.domain
+package ru.agapov.lab1.data
 
 import kotlin.random.Random
 
