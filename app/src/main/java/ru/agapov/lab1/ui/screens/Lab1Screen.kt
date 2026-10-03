@@ -2,11 +2,13 @@ package ru.agapov.lab1.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,11 +20,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import ru.agapov.lab1.data.ListGenerator
+import ru.agapov.lab1.data.ResultFormatter
+import ru.agapov.lab1.domain.ListSearcher
 import ru.agapov.lab1.ui.theme.Lab1Theme
 
 @Composable
 fun Lab1Screen(modifier: Modifier = Modifier) {
-    var inputText by remember { mutableStateOf("") }
+    var numbers by remember { mutableStateOf(ListGenerator.generate()) }
     var outputText by remember { mutableStateOf("") }
 
     Column(
@@ -46,8 +51,8 @@ fun Lab1Screen(modifier: Modifier = Modifier) {
         )
 
         OutlinedTextField(
-            value = inputText,
-            onValueChange = { inputText = it },
+            value = numbers.joinToString(", "),
+            onValueChange = { },
             modifier = Modifier.fillMaxWidth(),
             label = { Text("Список чисел") },
             enabled = false,
@@ -62,11 +67,29 @@ fun Lab1Screen(modifier: Modifier = Modifier) {
             enabled = false,
         )
 
-        Button(
-            onClick = { },
+        Row(
             modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            Text("Найти")
+            Button(
+                onClick = {
+                    val result = ListSearcher.search(numbers)
+                    outputText = ResultFormatter.format(result)
+                },
+                modifier = Modifier.weight(1f),
+            ) {
+                Text("Найти")
+            }
+
+            OutlinedButton(
+                onClick = {
+                    numbers = ListGenerator.generate()
+                    outputText = ""
+                },
+                modifier = Modifier.weight(1f),
+            ) {
+                Text("Перегенерировать")
+            }
         }
     }
 }
