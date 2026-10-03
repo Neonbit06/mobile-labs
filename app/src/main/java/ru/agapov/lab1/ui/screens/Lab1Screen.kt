@@ -55,7 +55,7 @@ fun Lab1Screen(modifier: Modifier = Modifier) {
             onValueChange = { },
             modifier = Modifier.fillMaxWidth(),
             label = { Text("Список чисел") },
-            enabled = false,
+            readOnly = true,
         )
 
         OutlinedTextField(
@@ -64,7 +64,7 @@ fun Lab1Screen(modifier: Modifier = Modifier) {
             modifier = Modifier.fillMaxWidth(),
             label = { Text("Результат") },
             minLines = 2,
-            enabled = false,
+            readOnly = true,
         )
 
         Row(
