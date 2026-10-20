@@ -4,13 +4,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import ru.agapov.musiciansdiary.domain.Entry
+import ru.agapov.musiciansdiary.domain.EntryType
+import ru.agapov.musiciansdiary.ui.screens.HomeScreen
 import ru.agapov.musiciansdiary.ui.theme.Lab1Theme
 
 class MainActivity : ComponentActivity() {
@@ -20,12 +19,36 @@ class MainActivity : ComponentActivity() {
         setContent {
             Lab1Theme {
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background,
+                    modifier = Modifier,
+                    color = MaterialTheme.colorScheme.background
                 ) {
-                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text("Musician's Diary — в разработке")
-                    }
+                    val mockEntries = listOf(
+                        Entry(
+                            title = "Battle Theme",
+                            type = EntryType.COMPOSITION.name,
+                            date = System.currentTimeMillis(),
+                            bpm = 140,
+                            key = "G minor",
+                            notes = "Добавил струнные в середину. Поработать над ударными в начале."
+                        ),
+                        Entry(
+                            title = "Night of Nights",
+                            type = EntryType.PRACTICE.name,
+                            date = System.currentTimeMillis() - 86400000,
+                            notes = "Доучить переход в другую тональность."
+                        ),
+                        Entry(
+                            title = "Идея саундтрека для игры",
+                            type = EntryType.IDEA.name,
+                            date = System.currentTimeMillis() - 172800000,
+                            notes = "Записал вступление, середина пока сырая."
+                        )
+                    )
+
+                    HomeScreen(
+                        entries = mockEntries,
+                        onEntryClick = { }
+                    )
                 }
             }
         }
