@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import ru.agapov.musiciansdiary.domain.Entry
 import ru.agapov.musiciansdiary.domain.EntryType
 import ru.agapov.musiciansdiary.ui.screens.HomeScreen
+import ru.agapov.musiciansdiary.ui.screens.EntryDetailScreen
 import ru.agapov.musiciansdiary.ui.theme.Lab1Theme
 
 class MainActivity : ComponentActivity() {
@@ -45,9 +46,11 @@ class MainActivity : ComponentActivity() {
                         )
                     )
 
-                    HomeScreen(
-                        entries = mockEntries,
-                        onEntryClick = { }
+                    EntryDetailScreen(
+                        entry = mockEntries.first(),
+                        onBackClick = { },
+                        onEditClick = { },
+                        onDeleteClick = { }
                     )
                 }
             }
