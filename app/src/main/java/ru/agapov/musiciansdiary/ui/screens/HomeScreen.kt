@@ -6,7 +6,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -23,6 +27,7 @@ import ru.agapov.musiciansdiary.ui.components.EntryCard
 fun HomeScreen(
     entries: List<Entry>,
     onEntryClick: (Entry) -> Unit,
+    onCreateClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -35,7 +40,16 @@ fun HomeScreen(
                 )
             )
         },
-        containerColor = Color(0xFF121212)
+        containerColor = Color(0xFF121212),
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = onCreateClick,
+                containerColor = Color(0xFF553D73),
+                contentColor = Color.White
+            ) {
+                Icon(Icons.Default.Add, contentDescription = "Создать")
+            }
+        }
     ) { innerPadding ->
         LazyColumn(
             modifier = Modifier
@@ -43,7 +57,7 @@ fun HomeScreen(
                 .padding(innerPadding)
                 .padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
-            contentPadding = PaddingValues(top = 16.dp, bottom = 16.dp)
+            contentPadding = PaddingValues(top = 16.dp, bottom = 80.dp)
         ) {
             items(entries, key = { it.id }) { entry ->
                 EntryCard(
