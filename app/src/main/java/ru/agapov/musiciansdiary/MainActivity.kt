@@ -11,6 +11,7 @@ import ru.agapov.musiciansdiary.domain.Entry
 import ru.agapov.musiciansdiary.domain.EntryType
 import ru.agapov.musiciansdiary.ui.screens.HomeScreen
 import ru.agapov.musiciansdiary.ui.screens.EntryDetailScreen
+import ru.agapov.musiciansdiary.ui.screens.EntryFormScreen
 import ru.agapov.musiciansdiary.ui.theme.Lab1Theme
 
 class MainActivity : ComponentActivity() {
@@ -46,11 +47,10 @@ class MainActivity : ComponentActivity() {
                         )
                     )
 
-                    EntryDetailScreen(
-                        entry = mockEntries.first(),
+                    EntryFormScreen(
+                        initialEntry = null,
                         onBackClick = { },
-                        onEditClick = { },
-                        onDeleteClick = { }
+                        onSaveClick = { }
                     )
                 }
             }
