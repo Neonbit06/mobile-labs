@@ -1,3 +1,19 @@
 <resources>
-    <string name="app_name">Lab 1 - List Search</string>
+    <string name="app_name">Musician\'s Diary</string>
+    <string name="screen_home_title">Musician\'s Diary</string>
+    <string name="screen_home_search_hint">Поиск…</string>
+    <string name="screen_home_create_button">+ Создать</string>
+    <string name="screen_detail_back">Назад</string>
+    <string name="screen_detail_notes_title">Заметка</string>
+    <string name="screen_detail_edit_button">Редактировать</string>
+    <string name="screen_detail_delete_button">Удалить</string>
+    <string name="screen_form_title_new">Новая запись</string>
+    <string name="screen_form_title_edit">Редактирование</string>
+    <string name="form_label_title">Название *</string>
+    <string name="form_label_type">Тип</string>
+    <string name="form_label_date">Дата</string>
+    <string name="form_label_bpm">BPM</string>
+    <string name="form_label_key">Тональность</string>
+    <string name="form_label_notes">Заметка</string>
+    <string name="form_save_button">Сохранить</string>
 </resources>
