@@ -1,42 +1,57 @@
 package ru.agapov.musiciansdiary.ui.screens
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuAnchorType
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.LocalLocale
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import ru.agapov.musiciansdiary.R
 import ru.agapov.musiciansdiary.domain.Entry
 import ru.agapov.musiciansdiary.domain.EntryType
+import ru.agapov.musiciansdiary.ui.components.BackHeader
+import ru.agapov.musiciansdiary.ui.theme.PrimaryPurpleStroke
+import java.text.SimpleDateFormat
+import java.util.Date
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -54,103 +69,112 @@ fun EntryFormScreen(
 
     var isTypeMenuExpanded by remember { mutableStateOf(false) }
 
-    val isEditMode = initialEntry != null
-    val screenTitle = if (isEditMode) "Редактирование" else "Новая запись"
+    val entryDate = remember { initialEntry?.date ?: System.currentTimeMillis() }
+    val dateString = SimpleDateFormat("dd.MM.yyyy", LocalLocale.current.platformLocale)
+        .format(Date(entryDate))
 
-    Scaffold(
-        modifier = modifier.fillMaxSize(),
-        topBar = {
-            TopAppBar(
-                title = { Text(screenTitle, color = Color.White) },
-                navigationIcon = {
-                    IconButton(onClick = onBackClick) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Назад",
-                            tint = Color.White
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color(0xFF121212)
-                )
-            )
-        },
-        containerColor = Color(0xFF121212)
-    ) { innerPadding ->
+    val colors = MaterialTheme.colorScheme
+
+    val types = mapOf(
+        EntryType.COMPOSITION.name to stringResource(R.string.type_composition),
+        EntryType.PRACTICE.name to stringResource(R.string.type_practice),
+        EntryType.IDEA.name to stringResource(R.string.type_idea),
+        EntryType.OTHER.name to stringResource(R.string.type_other)
+    )
+
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .background(colors.background)
+            .statusBarsPadding()
+            .navigationBarsPadding()
+            .imePadding()
+    ) {
+        BackHeader(onBackClick = onBackClick)
+
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
+                .weight(1f)
                 .verticalScroll(rememberScrollState())
-                .padding(16.dp),
+                .padding(horizontal = 24.dp, vertical = 12.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            FormTextField(
-                value = title,
-                onValueChange = { title = it },
-                label = "Название *"
-            )
+            LabeledField(label = stringResource(R.string.form_label_title)) {
+                BoxedTextField(value = title, onValueChange = { title = it })
+            }
 
-            ExposedDropdownMenuBox(
-                expanded = isTypeMenuExpanded,
-                onExpandedChange = { isTypeMenuExpanded = !isTypeMenuExpanded }
-            ) {
-                FormTextField(
-                    value = when (type) {
-                        EntryType.COMPOSITION.name -> "Композиция"
-                        EntryType.PRACTICE.name -> "Репетиция"
-                        EntryType.IDEA.name -> "Идея"
-                        else -> "Прочее"
-                    },
-                    onValueChange = {},
-                    label = "Тип",
-                    readOnly = true,
-                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = isTypeMenuExpanded) },
-                    modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
-                )
-                ExposedDropdownMenu(
+            LabeledField(label = stringResource(R.string.form_label_type)) {
+                ExposedDropdownMenuBox(
                     expanded = isTypeMenuExpanded,
-                    onDismissRequest = { isTypeMenuExpanded = false }
+                    onExpandedChange = { isTypeMenuExpanded = !isTypeMenuExpanded }
                 ) {
-                    val types = mapOf(
-                        EntryType.COMPOSITION.name to "Композиция",
-                        EntryType.PRACTICE.name to "Репетиция",
-                        EntryType.IDEA.name to "Идея",
-                        EntryType.OTHER.name to "Прочее"
-                    )
-                    types.forEach { (enumValue, label) ->
-                        DropdownMenuItem(
-                            text = { Text(label, color = Color.Black) },
-                            onClick = {
-                                type = enumValue
-                                isTypeMenuExpanded = false
-                            }
+                    Box(
+                        modifier = Modifier
+                            .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
+                            .fillMaxWidth()
+                            .heightIn(min = FieldHeight)
+                            .background(colors.surfaceVariant)
+                            .border(1.dp, colors.outline)
+                            .padding(horizontal = 8.dp),
+                        contentAlignment = Alignment.CenterStart
+                    ) {
+                        Text(
+                            text = types[type] ?: stringResource(R.string.type_other),
+                            style = FieldTextStyle(colors.onSurface)
                         )
+                        Text(
+                            text = "▼",
+                            fontSize = 16.sp,
+                            color = colors.onSurface,
+                            modifier = Modifier.align(Alignment.CenterEnd)
+                        )
+                    }
+                    ExposedDropdownMenu(
+                        expanded = isTypeMenuExpanded,
+                        onDismissRequest = { isTypeMenuExpanded = false },
+                        modifier = Modifier.background(colors.surfaceVariant)
+                    ) {
+                        types.forEach { (enumValue, label) ->
+                            DropdownMenuItem(
+                                text = { Text(label, color = colors.onSurface) },
+                                onClick = {
+                                    type = enumValue
+                                    isTypeMenuExpanded = false
+                                }
+                            )
+                        }
                     }
                 }
             }
 
-            FormTextField(
-                value = bpm,
-                onValueChange = { if (it.all { char -> char.isDigit() }) bpm = it },
-                label = "BPM",
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-            )
+            LabeledField(label = stringResource(R.string.form_label_date)) {
+                BoxedTextField(
+                    value = dateString,
+                    onValueChange = {},
+                    readOnly = true
+                )
+            }
 
-            FormTextField(
-                value = key,
-                onValueChange = { key = it },
-                label = "Тональность"
-            )
+            LabeledField(label = stringResource(R.string.form_label_bpm)) {
+                BoxedTextField(
+                    value = bpm,
+                    onValueChange = { if (it.all { char -> char.isDigit() }) bpm = it },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                )
+            }
 
-            FormTextField(
-                value = notes,
-                onValueChange = { notes = it },
-                label = "Заметка",
-                singleLine = false,
-                minLines = 5
-            )
+            LabeledField(label = stringResource(R.string.form_label_key)) {
+                BoxedTextField(value = key, onValueChange = { key = it })
+            }
+
+            LabeledField(label = stringResource(R.string.form_label_notes)) {
+                BoxedTextField(
+                    value = notes,
+                    onValueChange = { notes = it },
+                    singleLine = false,
+                    minHeight = 136.dp
+                )
+            }
 
             Button(
                 onClick = {
@@ -173,49 +197,84 @@ fun EntryFormScreen(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 8.dp),
+                    .height(68.dp),
                 enabled = title.isNotBlank(),
+                shape = RoundedCornerShape(14.dp),
+                border = BorderStroke(1.dp, PrimaryPurpleStroke),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF553D73),
-                    disabledContainerColor = Color(0xFF3B2A4F)
+                    containerColor = colors.primary,
+                    contentColor = colors.onPrimary,
+                    disabledContainerColor = colors.primary.copy(alpha = 0.5f),
+                    disabledContentColor = colors.onPrimary.copy(alpha = 0.7f)
                 )
             ) {
-                Text("Сохранить", color = Color.White, modifier = Modifier.padding(vertical = 4.dp))
+                Text(
+                    text = stringResource(R.string.form_save_button),
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.Bold
+                )
             }
         }
     }
 }
 
+private val FieldHeight = 48.dp
+
+private fun FieldTextStyle(color: androidx.compose.ui.graphics.Color) = TextStyle(
+    color = color,
+    fontSize = 16.sp,
+    fontWeight = FontWeight.SemiBold
+)
+
 @Composable
-private fun FormTextField(
+private fun LabeledField(
+    label: String,
+    content: @Composable () -> Unit
+) {
+    Column {
+        Text(
+            text = label,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Medium,
+            color = MaterialTheme.colorScheme.onBackground
+        )
+        Spacer(Modifier.height(8.dp))
+        content()
+    }
+}
+
+@Composable
+private fun BoxedTextField(
     value: String,
     onValueChange: (String) -> Unit,
-    label: String,
+    modifier: Modifier = Modifier,
     readOnly: Boolean = false,
     singleLine: Boolean = true,
-    minLines: Int = 1,
-    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    @SuppressLint("ModifierParameter") modifier: Modifier = Modifier,
-    trailingIcon: @Composable (() -> Unit)? = null
+    minHeight: Dp = FieldHeight,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default
 ) {
-    OutlinedTextField(
+    val colors = MaterialTheme.colorScheme
+    BasicTextField(
         value = value,
         onValueChange = onValueChange,
-        label = { Text(label, color = Color(0xFFB0B0B0)) },
         modifier = modifier.fillMaxWidth(),
         readOnly = readOnly,
         singleLine = singleLine,
-        minLines = minLines,
         keyboardOptions = keyboardOptions,
-        trailingIcon = trailingIcon,
-        colors = OutlinedTextFieldDefaults.colors(
-            focusedTextColor = Color.White,
-            unfocusedTextColor = Color.White,
-            focusedContainerColor = Color(0xFF2C2C2C),
-            unfocusedContainerColor = Color(0xFF2C2C2C),
-            focusedBorderColor = Color(0xFF696969),
-            unfocusedBorderColor = Color(0xFF696969),
-            cursorColor = Color.White
-        )
+        textStyle = FieldTextStyle(colors.onSurface),
+        cursorBrush = SolidColor(colors.onSurface),
+        decorationBox = { innerTextField ->
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(min = minHeight)
+                    .background(colors.surfaceVariant)
+                    .border(1.dp, colors.outline)
+                    .padding(horizontal = 8.dp, vertical = 12.dp),
+                contentAlignment = if (singleLine) Alignment.CenterStart else Alignment.TopStart
+            ) {
+                innerTextField()
+            }
+        }
     )
 }
