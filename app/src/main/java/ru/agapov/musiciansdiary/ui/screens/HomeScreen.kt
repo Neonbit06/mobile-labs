@@ -30,11 +30,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import ru.agapov.musiciansdiary.R
 import ru.agapov.musiciansdiary.domain.Entry
 import ru.agapov.musiciansdiary.ui.components.EntryCard
 
@@ -87,7 +89,7 @@ fun HomeScreen(
                 ),
                 contentPadding = PaddingValues(horizontal = 16.dp)
             ) {
-                Text("+ Создать", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                Text(stringResource(R.string.screen_home_create_button), fontSize = 18.sp, fontWeight = FontWeight.Bold)
             }
         }
         HorizontalDivider(color = colors.outline.copy(alpha = 0.6f))
@@ -113,7 +115,7 @@ fun HomeScreen(
                 ) {
                     if (searchQuery.isEmpty()) {
                         Text(
-                            text = "Поиск...",
+                            text = stringResource(R.string.screen_home_search_hint),
                             fontSize = 18.sp,
                             color = colors.onSurfaceVariant.copy(alpha = 0.8f)
                         )
@@ -123,16 +125,31 @@ fun HomeScreen(
             }
         )
 
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(32.dp),
-            contentPadding = PaddingValues(start = 24.dp, end = 24.dp, top = 8.dp, bottom = 24.dp)
-        ) {
-            items(filteredEntries, key = { it.id }) { entry ->
-                EntryCard(
-                    entry = entry,
-                    onClick = { onEntryClick(entry) }
+        if (filteredEntries.isEmpty() && searchQuery.isNotEmpty()) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = stringResource(R.string.screen_home_empty_search),
+                    fontSize = 20.sp,
+                    color = colors.onSurfaceVariant
                 )
+            }
+        } else {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.spacedBy(32.dp),
+                contentPadding = PaddingValues(start = 24.dp, end = 24.dp, top = 8.dp, bottom = 24.dp)
+            ) {
+                items(filteredEntries, key = { it.id }) { entry ->
+                    EntryCard(
+                        entry = entry,
+                        onClick = { onEntryClick(entry) }
+                    )
+                }
             }
         }
     }

@@ -38,12 +38,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalLocale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import ru.agapov.musiciansdiary.R
 import ru.agapov.musiciansdiary.domain.Entry
 import ru.agapov.musiciansdiary.domain.EntryType
 import ru.agapov.musiciansdiary.ui.components.BackHeader
@@ -74,10 +76,10 @@ fun EntryFormScreen(
     val colors = MaterialTheme.colorScheme
 
     val types = mapOf(
-        EntryType.COMPOSITION.name to "Композиция",
-        EntryType.PRACTICE.name to "Репетиция",
-        EntryType.IDEA.name to "Идея",
-        EntryType.OTHER.name to "Прочее"
+        EntryType.COMPOSITION.name to stringResource(R.string.type_composition),
+        EntryType.PRACTICE.name to stringResource(R.string.type_practice),
+        EntryType.IDEA.name to stringResource(R.string.type_idea),
+        EntryType.OTHER.name to stringResource(R.string.type_other)
     )
 
     Column(
@@ -97,11 +99,11 @@ fun EntryFormScreen(
                 .padding(horizontal = 24.dp, vertical = 12.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            LabeledField(label = "Название *") {
+            LabeledField(label = stringResource(R.string.form_label_title)) {
                 BoxedTextField(value = title, onValueChange = { title = it })
             }
 
-            LabeledField(label = "Тип") {
+            LabeledField(label = stringResource(R.string.form_label_type)) {
                 ExposedDropdownMenuBox(
                     expanded = isTypeMenuExpanded,
                     onExpandedChange = { isTypeMenuExpanded = !isTypeMenuExpanded }
@@ -117,7 +119,7 @@ fun EntryFormScreen(
                         contentAlignment = Alignment.CenterStart
                     ) {
                         Text(
-                            text = types[type] ?: "Прочее",
+                            text = types[type] ?: stringResource(R.string.type_other),
                             style = FieldTextStyle(colors.onSurface)
                         )
                         Text(
@@ -145,7 +147,7 @@ fun EntryFormScreen(
                 }
             }
 
-            LabeledField(label = "Дата") {
+            LabeledField(label = stringResource(R.string.form_label_date)) {
                 BoxedTextField(
                     value = dateString,
                     onValueChange = {},
@@ -153,7 +155,7 @@ fun EntryFormScreen(
                 )
             }
 
-            LabeledField(label = "BPM") {
+            LabeledField(label = stringResource(R.string.form_label_bpm)) {
                 BoxedTextField(
                     value = bpm,
                     onValueChange = { if (it.all { char -> char.isDigit() }) bpm = it },
@@ -161,11 +163,11 @@ fun EntryFormScreen(
                 )
             }
 
-            LabeledField(label = "Тональность") {
+            LabeledField(label = stringResource(R.string.form_label_key)) {
                 BoxedTextField(value = key, onValueChange = { key = it })
             }
 
-            LabeledField(label = "Заметка") {
+            LabeledField(label = stringResource(R.string.form_label_notes)) {
                 BoxedTextField(
                     value = notes,
                     onValueChange = { notes = it },
@@ -207,7 +209,7 @@ fun EntryFormScreen(
                 )
             ) {
                 Text(
-                    text = "Сохранить",
+                    text = stringResource(R.string.form_save_button),
                     fontSize = 22.sp,
                     fontWeight = FontWeight.Bold
                 )

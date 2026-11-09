@@ -13,10 +13,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLocale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import ru.agapov.musiciansdiary.R
 import ru.agapov.musiciansdiary.domain.Entry
 import ru.agapov.musiciansdiary.domain.EntryType
 import java.text.SimpleDateFormat
@@ -33,10 +35,10 @@ fun EntryCard(
         .format(Date(entry.date))
 
     val typeString = when (entry.type) {
-        EntryType.COMPOSITION.name -> "Композиция"
-        EntryType.PRACTICE.name -> "Репетиция"
-        EntryType.IDEA.name -> "Идея"
-        else -> "Прочее"
+        EntryType.COMPOSITION.name -> stringResource(R.string.type_composition)
+        EntryType.PRACTICE.name -> stringResource(R.string.type_practice)
+        EntryType.IDEA.name -> stringResource(R.string.type_idea)
+        else -> stringResource(R.string.type_other)
     }
 
     Card(

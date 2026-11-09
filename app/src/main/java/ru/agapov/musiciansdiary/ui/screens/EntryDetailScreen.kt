@@ -26,9 +26,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLocale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import ru.agapov.musiciansdiary.R
 import ru.agapov.musiciansdiary.domain.Entry
 import ru.agapov.musiciansdiary.domain.EntryType
 import ru.agapov.musiciansdiary.ui.components.BackHeader
@@ -49,10 +51,10 @@ fun EntryDetailScreen(
         .format(Date(entry.date))
 
     val typeString = when (entry.type) {
-        EntryType.COMPOSITION.name -> "Композиция"
-        EntryType.PRACTICE.name -> "Репетиция"
-        EntryType.IDEA.name -> "Идея"
-        else -> "Прочее"
+        EntryType.COMPOSITION.name -> stringResource(R.string.type_composition)
+        EntryType.PRACTICE.name -> stringResource(R.string.type_practice)
+        EntryType.IDEA.name -> stringResource(R.string.type_idea)
+        else -> stringResource(R.string.type_other)
     }
 
     val metaText = buildString {
@@ -113,13 +115,14 @@ fun EntryDetailScreen(
                     .padding(start = 20.dp, end = 20.dp, top = 12.dp, bottom = 24.dp)
             ) {
                 Text(
-                    text = "Заметка",
+                    text = stringResource(R.string.screen_detail_notes_title),
                     fontSize = 26.sp,
                     color = colors.onBackground
                 )
                 Spacer(Modifier.height(56.dp))
                 Text(
-                    text = entry.notes.ifBlank { "Нет заметок" },
+                    text = entry.notes.ifBlank {
+                        stringResource(R.string.screen_detail_no_notes) },
                     fontSize = 20.sp,
                     fontWeight = FontWeight.SemiBold,
                     lineHeight = 28.sp,
@@ -150,7 +153,7 @@ fun EntryDetailScreen(
                 )
             ) {
                 Text(
-                    text = "Редактировать",
+                    text = stringResource(R.string.screen_detail_edit_button),
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
                     maxLines = 1
@@ -170,7 +173,7 @@ fun EntryDetailScreen(
                 )
             ) {
                 Text(
-                    text = "Удалить",
+                    text = stringResource(R.string.screen_detail_delete_button),
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
                     maxLines = 1
