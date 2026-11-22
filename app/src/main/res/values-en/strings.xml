@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">Musician\'s Diary</string>
+
+    <string name="screen_home_title">Musician\'s Diary</string>
+    <string name="screen_home_create_button">+ Create</string>
+    <string name="screen_home_search_hint">Search…</string>
+    <string name="screen_home_empty_search">Nothing found</string>
+
+    <string name="screen_detail_back">Back</string>
+    <string name="screen_detail_title">Entry Details</string>
+    <string name="screen_detail_notes_title">Note</string>
+    <string name="screen_detail_edit_button">Edit</string>
+    <string name="screen_detail_delete_button">Delete</string>
+    <string name="screen_detail_no_notes">No notes</string>
+
+    <string name="screen_form_title_new">New Entry</string>
+    <string name="screen_form_title_edit">Edit Entry</string>
+    <string name="form_label_title">Title *</string>
+    <string name="form_label_type">Type</string>
+    <string name="form_label_date">Date</string>
+    <string name="form_label_bpm">BPM</string>
+    <string name="form_label_key">Key</string>
+    <string name="form_label_notes">Note</string>
+    <string name="form_save_button">Save</string>
+
+    <string name="type_composition">Composition</string>
+    <string name="type_practice">Practice</string>
+    <string name="type_idea">Idea</string>
+    <string name="type_other">Other</string>
+</resources>
